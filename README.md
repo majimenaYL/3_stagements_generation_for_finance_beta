@@ -1,6 +1,6 @@
 # 3-Statements-Ultra — Public Edition
 
-**English** | [中文](README.zh.md)
+**English** | [Chinese](README.zh.md)
 
 **Version:** 4.7 · Public Edition
 **Build date:** April 2026
@@ -39,7 +39,7 @@ Python 3.9+ required.
 
 ### Cowork / Claude Code (skill file)
 
-1. Download `3-statements-ultra-public.skill`
+1. Download `3_statements_beta.skill`
 2. In Cowork: **Settings → Skills → Install from file** → select the `.skill` file
 3. In Claude Code CLI: place the unzipped folder under your `.claude/skills/` directory
 
@@ -47,7 +47,7 @@ Python 3.9+ required.
 
 ```bash
 # Unzip the skill
-unzip 3-statements-ultra-public.skill -d ~/.claude/skills/3-statements-ultra/
+unzip 3_statements_beta.skill -d ~/.claude/skills/3-statements-ultra/
 ```
 
 ---
@@ -78,11 +78,11 @@ Disk state (_State, _model_log.md, _pending_links.json) is always authoritative.
 Just say one of these trigger phrases and the skill takes over:
 
 ```
-三表模型
+three-statement model
 financial model
 3-statement model
-建模
-从零建模
+modeling
+build from scratch
 build a 3-statement model for [company name]
 ```
 
@@ -216,7 +216,7 @@ This is the most fundamental difference. The official skill calculates Cash by p
 
 **2. Revenue is split by segment with independent drivers.**
 
-The official skill treats revenue as a single line. This skill builds each business segment as an independently driven row — separate YoY growth %, separate volume × ASP structure if applicable, separate seasonality percentages for quarterly models. A single-line revenue assumption is adequate for a back-of-envelope; it is not adequate for an equity research or IC memo-quality model where you need to stress individual product lines or geography.
+The official skill treats revenue as a single line. This skill builds each business segment as an independently driven row — separate YoY growth %, separate volume x ASP structure if applicable, separate seasonality percentages for quarterly models. A single-line revenue assumption is adequate for a back-of-envelope; it is not adequate for an equity research or IC memo-quality model where you need to stress individual product lines or geography.
 
 **3. Every forecast cell is an Excel formula — no exceptions.**
 
@@ -224,7 +224,7 @@ Rule Zero of this skill is that no forecast cell in IS/BS/CF may hold a hardcode
 
 **4. CN GAAP is modelled natively.**
 
-Chinese GAAP income statements have items between 营业总成本 and 营业利润 (其他收益, 信用减值损失, 资产减值损失, etc.) that are not present in IFRS or US GAAP. This skill handles them with a dedicated R8 plug row that captures the residual between source 营业利润 and model-derived EBIT. Ignoring these items — as a generic template will — produces systematically wrong EBIT for A-share and HK-listed CN GAAP companies.
+Chinese GAAP income statements have items between Total Operating Costs and Operating Profit (Other Income, Credit Impairment Losses, Asset Impairment Losses, etc.) that are not present in IFRS or US GAAP. This skill handles them with a dedicated R8 plug row that captures the residual between source Operating Profit and model-derived EBIT. Ignoring these items — as a generic template will — produces systematically wrong EBIT for A-share and HK-listed CN GAAP companies.
 
 **5. Nine QC checks must pass before the model is marked complete.**
 
@@ -241,7 +241,7 @@ If a company has minority interest, NCI on the balance sheet must compound each 
 | Cash derivation | `= CF Ending Cash` (always) | Plugged from BS residual |
 | Revenue structure | Per-segment, independent drivers | Single line |
 | Forecast cells | 100% Excel formulas | Mix of formulas and hardcodes |
-| CN GAAP support | Native (R8 plug, 营业利润 reconciliation) | Generic template |
+| CN GAAP support | Native (R8 plug, Operating Profit reconciliation) | Generic template |
 | QC validation | 9 mandatory checks | None |
 | NCI roll-forward | Enforced | Not guaranteed |
 | Quarterly granularity | Full (35 IS columns per year) | Annual only |
